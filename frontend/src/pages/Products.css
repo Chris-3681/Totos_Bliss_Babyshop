@@ -1,0 +1,258 @@
+.products-page {
+  min-height: 100vh;
+  background: #f7f8fc;
+  color: #222;
+  padding: 24px;
+  font-family: Arial, sans-serif;
+}
+
+.store-hero {
+  background: linear-gradient(135deg, #fff0f4, #ffe4ec);
+  padding: 40px 30px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.hero-content h1 {
+  margin: 0 0 10px;
+  font-size: 32px;
+  color: #f05a7e;
+}
+
+.hero-content p {
+  margin: 0;
+  color: #555;
+  font-size: 16px;
+  max-width: 600px;
+}
+
+.trust-strip {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: #fff;
+  padding: 16px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #444;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+}
+
+.store-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.store-topbar h1 {
+  margin: 0;
+  font-size: 28px;
+  color: #f05a7e;
+}
+
+.muted {
+  margin: 6px 0 0;
+  color: #666;
+}
+
+.top-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.top-actions a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+}
+
+.products-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 20px;
+}
+
+.filter-sidebar {
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  height: fit-content;
+}
+
+.filter-sidebar h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.filter-block {
+  display: block;
+  margin-bottom: 16px;
+}
+
+.filter-block span {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.filter-block input,
+.toolbar-controls select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  outline: none;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.products-main {
+  min-width: 0;
+}
+
+.products-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 16px 18px;
+  border-radius: 16px;
+  margin-bottom: 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  gap: 16px;
+}
+
+.toolbar-controls label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+.product-card {
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+.product-image-wrap {
+  position: relative;
+  background: #fafafa;
+}
+
+.product-image {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
+
+.quick-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(240, 90, 126, 0.92);
+  color: white;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+.product-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #222;
+}
+
+.product-body {
+  padding: 16px;
+}
+
+.product-body h3 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.product-description {
+  color: #666;
+  font-size: 14px;
+  min-height: 40px;
+}
+
+.product-price {
+  font-size: 22px;
+  font-weight: 700;
+  color: #f05a7e;
+  margin: 12px 0 10px;
+}
+
+.product-meta {
+  margin-bottom: 14px;
+}
+
+.in-stock {
+  color: #157347;
+  font-weight: 600;
+}
+
+.out-stock {
+  color: #b02a37;
+  font-weight: 600;
+}
+
+.primary-btn {
+  width: 100%;
+  border: none;
+  background: #f05a7e;
+  color: #fff;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primary-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.empty-state {
+  background: #fff;
+  padding: 28px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .products-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .products-toolbar,
+  .store-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

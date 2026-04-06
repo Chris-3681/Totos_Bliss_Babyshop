@@ -1,0 +1,142 @@
+.cart-page {
+  min-height: 100vh;
+  background: #f7f8fc;
+  padding: 24px;
+  font-family: Arial, sans-serif;
+}
+
+.cart-hero {
+  background: linear-gradient(135deg, #fff0f4, #ffe4ec);
+  padding: 32px;
+  border-radius: 20px;
+  margin-bottom: 22px;
+}
+
+.cart-hero h1 {
+  margin: 0 0 10px;
+  color: #f05a7e;
+  font-size: 32px;
+}
+
+.cart-hero p {
+  margin: 0;
+  color: #555;
+  font-size: 16px;
+}
+
+.cart-empty {
+  background: #fff;
+  padding: 36px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.cart-layout {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr;
+  gap: 22px;
+}
+
+.cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.cart-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 18px;
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.cart-image-placeholder {
+  height: 110px;
+  border-radius: 14px;
+  background: #fff0f4;
+  border: 1px solid #ffd7e2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f05a7e;
+  font-weight: 700;
+}
+
+.cart-card-content h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+.cart-card-content p {
+  margin: 6px 0;
+  color: #444;
+}
+
+.cart-subtotal {
+  color: #f05a7e;
+  font-weight: 700;
+  margin-top: 10px;
+}
+
+.cart-summary {
+  background: #fff;
+  border-radius: 18px;
+  padding: 22px;
+  height: fit-content;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.cart-summary h3 {
+  margin-top: 0;
+  margin-bottom: 18px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: #444;
+}
+
+.total-row {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid #eee;
+  font-size: 18px;
+}
+
+.cart-primary-btn {
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  margin-top: 18px;
+  padding: 12px 16px;
+  background: #f05a7e;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.cart-secondary-link {
+  display: inline-block;
+  margin-top: 14px;
+  text-decoration: none;
+  color: #555;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .cart-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-card {
+    grid-template-columns: 1fr;
+  }
+}

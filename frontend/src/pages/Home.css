@@ -1,0 +1,98 @@
+.home-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fff7fa 0%, #f7f8fc 100%);
+  padding: 32px;
+  font-family: Arial, sans-serif;
+}
+
+.hero-card {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 24px;
+  padding: 36px;
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 24px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.07);
+}
+
+.hero-kicker {
+  color: #f05a7e;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.hero-left h1 {
+  font-size: 44px;
+  line-height: 1.1;
+  margin: 10px 0 16px;
+}
+
+.hero-left p {
+  color: #555;
+  font-size: 17px;
+}
+
+.hero-actions {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.hero-primary,
+.hero-secondary {
+  text-decoration: none;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.hero-primary {
+  background: #f05a7e;
+  color: #fff;
+}
+
+.hero-secondary {
+  background: #f3f4f6;
+  color: #222;
+}
+
+.hero-panel {
+  background: #fff7fa;
+  border: 1px solid #ffd7e2;
+  padding: 20px;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hero-panel a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+}
+
+.hero-panel button {
+  margin-top: 10px;
+  border: none;
+  background: #222;
+  color: #fff;
+  padding: 12px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .hero-card {
+    grid-template-columns: 1fr;
+    padding: 24px;
+  }
+
+  .hero-left h1 {
+    font-size: 32px;
+  }
+}
