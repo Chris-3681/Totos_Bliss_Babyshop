@@ -1,0 +1,24 @@
+.trust-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.trust-item {
+  background: var(--white);
+  padding: 16px;
+  border-radius: 14px;
+  text-align: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+}
+
+.trust-item h4 {
+  color: var(--primary-purple);
+  margin-bottom: 6px;
+}
+
+.trust-item p {
+  font-size: 13px;
+  color: var(--text-muted);
+}

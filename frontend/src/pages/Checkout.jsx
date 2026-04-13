@@ -3,22 +3,26 @@ import { Link } from "react-router-dom";
 import API from "../services/api";
 import Navbar from "../components/Navbar";
 import "./Checkout.css";
+import Footer from "../components/Footer";
 
 function Checkout() {
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleCheckout = async () => {
     if (!address || !phone) {
-      alert("Please fill in all delivery details");
+      setErrorMessage("Please fill in all delivery details.");
+      setSuccessMessage("");
       return;
     }
 
     try {
       setLoading(true);
       setSuccessMessage("");
+      setErrorMessage("");
 
       const orderRes = await API.post("/orders/create");
       const orderId = orderRes.data.order_id;
@@ -29,13 +33,14 @@ function Checkout() {
         phone,
       });
 
-      setSuccessMessage("Order placed successfully. Delivery details saved.");
+      setSuccessMessage("Your order has been placed successfully.");
       setAddress("");
       setPhone("");
     } catch (err) {
       console.error("CHECKOUT ERROR:", err);
       console.log("CHECKOUT DATA:", err.response?.data);
-      alert("Checkout failed. Please try again.");
+      setErrorMessage("Checkout failed. Please try again.");
+      setSuccessMessage("");
     } finally {
       setLoading(false);
     }
@@ -50,9 +55,18 @@ function Checkout() {
         <p>Complete your order by entering your delivery details below.</p>
       </div>
 
+      <div className="checkout-reassurance">
+        <span>✔ Secure checkout</span>
+        <span>✔ Fast delivery within Nairobi</span>
+        <span>✔ M-Pesa / bank options available</span>
+      </div>
+
       <div className="checkout-layout">
         <div className="checkout-form-card">
           <h3>Delivery Information</h3>
+
+          {errorMessage && <div className="checkout-message error">{errorMessage}</div>}
+          {successMessage && <div className="checkout-message success">{successMessage}</div>}
 
           <label>Delivery Address</label>
           <input
@@ -71,19 +85,24 @@ function Checkout() {
           />
 
           <button onClick={handleCheckout} disabled={loading}>
-            {loading ? "Processing..." : "Place Order"}
+            {loading ? "Processing..." : "Secure Your Order"}
           </button>
 
-          {successMessage && (
-            <p className="success-message">{successMessage}</p>
-          )}
+          <a
+            href="https://wa.me/254715197697?text=Hi%20I%20need%20help%20with%20checkout"
+            target="_blank"
+            rel="noreferrer"
+            className="whatsapp-inline checkout-whatsapp"
+          >
+            Need help? Chat on WhatsApp
+          </a>
         </div>
 
         <div className="checkout-info-card">
           <h3>Why shop with Totos Bliss?</h3>
           <ul>
             <li>Carefully selected baby products</li>
-            <li>Simple and secure checkout flow</li>
+            <li>Simple and secure ordering process</li>
             <li>Fast order processing</li>
             <li>VAT included in your final total</li>
           </ul>
@@ -100,6 +119,8 @@ function Checkout() {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }

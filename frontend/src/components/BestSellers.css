@@ -1,0 +1,32 @@
+.best-sellers {
+  margin: 30px 0;
+}
+
+.best-sellers h2 {
+  margin-bottom: 14px;
+  color: var(--primary-purple);
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+}
+
+.product-card {
+  background: var(--white);
+  padding: 16px;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+}
+
+.product-card h4 {
+  margin: 0 0 8px;
+  color: var(--text-dark);
+}
+
+.product-card p {
+  margin: 0;
+  color: var(--primary-purple);
+  font-weight: 700;
+}

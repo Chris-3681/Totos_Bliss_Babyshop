@@ -5,46 +5,46 @@ import Footer from "../components/Footer";
 import API from "../services/api";
 import "./AdminOrders.css";
 
-function AdminOrders() {
-  const [orders, setOrders] = useState([]);
+function AdminDeliveries() {
+  const [deliveries, setDeliveries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const fetchOrders = async () => {
+  const fetchDeliveries = async () => {
     try {
-      const res = await API.get("/orders/admin");
-      setOrders(Array.isArray(res.data) ? res.data : []);
+      const res = await API.get("/delivery/admin");
+      setDeliveries(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
-      console.error("FETCH ORDERS ERROR:", err);
+      console.error("FETCH DELIVERIES ERROR:", err);
       console.log(err.response?.data);
-      setOrders([]);
+      setDeliveries([]);
     }
   };
 
   useEffect(() => {
-    const loadOrders = async () => {
+    const loadDeliveries = async () => {
       try {
-        await fetchOrders();
+        await fetchDeliveries();
       } finally {
         setLoading(false);
       }
     };
 
-    loadOrders();
+    loadDeliveries();
   }, []);
 
-  const updateStatus = async (orderId, status) => {
+  const updateStatus = async (deliveryId, status) => {
     try {
-      await API.put(`/orders/admin/${orderId}/status`, { status });
-      setSuccessMessage("Order status updated.");
+      await API.put(`/delivery/admin/${deliveryId}/status`, { status });
+      setSuccessMessage("Delivery status updated.");
       setErrorMessage("");
       setTimeout(() => setSuccessMessage(""), 2500);
-      await fetchOrders();
+      await fetchDeliveries();
     } catch (err) {
-      console.error("UPDATE ORDER STATUS ERROR:", err);
+      console.error("UPDATE DELIVERY STATUS ERROR:", err);
       console.log(err.response?.data);
-      setErrorMessage("Failed to update order status.");
+      setErrorMessage("Failed to update delivery status.");
       setSuccessMessage("");
       setTimeout(() => setErrorMessage(""), 2500);
     }
@@ -54,7 +54,7 @@ function AdminOrders() {
     return (
       <div className="admin-orders-page">
         <Navbar />
-        <LoadingBlock text="Loading orders..." />
+        <LoadingBlock text="Loading deliveries..." />
         <Footer />
       </div>
     );
@@ -65,36 +65,35 @@ function AdminOrders() {
       <Navbar />
 
       <div className="admin-page-header">
-        <h1>Orders</h1>
-        <p>Track customer orders and update order progress.</p>
+        <h1>Deliveries</h1>
+        <p>Track delivery progress and update fulfillment status.</p>
       </div>
 
       {errorMessage && <div className="admin-message error">{errorMessage}</div>}
       {successMessage && <div className="admin-message success">{successMessage}</div>}
 
       <div className="admin-list-card">
-        {orders.length === 0 ? (
-          <p>No orders found</p>
+        {deliveries.length === 0 ? (
+          <p>No deliveries found</p>
         ) : (
-          orders.map((order) => (
-            <div className="admin-item-card" key={order.id}>
+          deliveries.map((delivery) => (
+            <div className="admin-item-card" key={delivery.id}>
               <div>
-                <p><strong>Order #{order.id}</strong></p>
-                <p>User ID: {order.user_id}</p>
-                <p>Total: KSh {Number(order.total_amount).toLocaleString()}</p>
-                <p>Status: {order.status}</p>
-                <p>Created At: {order.created_at}</p>
+                <p><strong>Delivery #{delivery.id}</strong></p>
+                <p>Order ID: {delivery.order_id}</p>
+                <p>Address: {delivery.address}</p>
+                <p>Phone: {delivery.phone}</p>
+                <p>Status: {delivery.status}</p>
               </div>
 
               <select
-                value={order.status}
-                onChange={(e) => updateStatus(order.id, e.target.value)}
+                value={delivery.status}
+                onChange={(e) => updateStatus(delivery.id, e.target.value)}
               >
                 <option value="pending">Pending</option>
                 <option value="processing">Processing</option>
                 <option value="dispatched">Dispatched</option>
                 <option value="delivered">Delivered</option>
-                <option value="paid">Paid</option>
               </select>
             </div>
           ))
@@ -106,4 +105,4 @@ function AdminOrders() {
   );
 }
 
-export default AdminOrders;
+export default AdminDeliveries;

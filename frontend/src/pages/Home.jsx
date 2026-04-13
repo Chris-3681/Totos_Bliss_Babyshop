@@ -1,5 +1,9 @@
-import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import TrustStrip from "../components/TrustStrip";
+import Categories from "../components/Categories";
+import BestSellers from "../components/BestSellers";
+import { Link } from "react-router-dom";
 import "./Home.css";
 
 function Home() {
@@ -10,28 +14,24 @@ function Home() {
       <div className="hero-card">
         <div className="hero-left">
           <p className="hero-kicker">Totos Bliss Baby Shop</p>
-          <h1>Baby essentials, clothing and accessories in one place</h1>
+          <h1>Quality Baby Products Parents Trust</h1>
           <p>
-            Shop quality baby products, manage your cart easily, and complete your
-            order in minutes.
+           Shop affordable baby essentials, clothing, and accessories with fast order
+           processing and reliable delivery.
           </p>
 
-          <div className="hero-actions">
-            <Link to="/products" className="hero-primary">Shop Now</Link>
-            <Link to="/login" className="hero-secondary">Login</Link>
-          </div>
-        </div>
-
-        <div className="hero-right">
-          <div className="hero-panel">
-            <h3>Why shop with us?</h3>
-            <p>Quality baby products</p>
-            <p>Simple ordering process</p>
-            <p>Admin-managed inventory</p>
-            <p>VAT clearly included</p>
-          </div>
+          <Link to="/products" className="hero-primary">
+            Shop Best Sellers
+          </Link>
         </div>
       </div>
+
+      <TrustStrip />
+      <Categories />
+      <BestSellers />
+
+      <Footer />
+      
     </div>
   );
 }

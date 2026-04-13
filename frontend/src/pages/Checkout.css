@@ -1,107 +1,165 @@
 .checkout-page {
   min-height: 100vh;
-  background: #f7f8fc;
+  background: var(--soft-bg);
   padding: 24px;
   font-family: Arial, sans-serif;
 }
 
-.checkout-header {
-  background: #fff;
-  padding: 20px;
-  border-radius: 18px;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: space-between;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+.checkout-hero {
+  background: linear-gradient(135deg, var(--white), var(--purple-soft));
+  padding: 32px;
+  border-radius: 20px;
+  margin-bottom: 22px;
 }
 
-.checkout-header h1 {
+.checkout-hero h1 {
+  margin: 0 0 10px;
+  color: var(--primary-purple);
+  font-size: 32px;
+}
+
+.checkout-hero p {
   margin: 0;
-  color: #f05a7e;
-}
-
-.checkout-links {
-  display: flex;
-  gap: 14px;
-}
-
-.checkout-links a {
-  text-decoration: none;
-  font-weight: 600;
-  color: #333;
+  color: #555;
+  font-size: 16px;
 }
 
 .checkout-layout {
   display: grid;
   grid-template-columns: 1fr 0.8fr;
-  gap: 20px;
+  gap: 22px;
 }
 
-.checkout-form {
-  background: #fff;
-  padding: 24px;
+.checkout-form-card,
+.checkout-info-card {
+  background: var(--white);
   border-radius: 18px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+  padding: 24px;
+  box-shadow: var(--shadow-soft);
 }
 
-.checkout-form h3 {
+.checkout-form-card h3,
+.checkout-info-card h3 {
+  margin-top: 0;
   margin-bottom: 18px;
 }
 
-.checkout-form label {
+.checkout-form-card label {
   display: block;
-  margin-top: 12px;
+  margin-top: 14px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #333;
+}
+
+.checkout-form-card input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  outline: none;
+  font-size: 14px;
+}
+
+.checkout-form-card button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 13px 16px;
+  border: none;
+  background: var(--primary-purple);
+  color: var(--white);
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.checkout-form-card button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.success-message,
+.checkout-message.success {
+  margin-top: 16px;
+  padding: 12px 14px;
+  background: var(--success-bg);
+  color: var(--success-text);
+  border: 1px solid var(--success-border);
+  border-radius: 12px;
   font-weight: 600;
 }
 
-.checkout-form input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 6px;
+.checkout-message {
+  margin-bottom: 14px;
+  padding: 12px 14px;
   border-radius: 10px;
-  border: 1px solid #ddd;
+  font-size: 14px;
+  font-weight: 600;
 }
 
-.checkout-form button {
-  margin-top: 18px;
-  width: 100%;
-  padding: 12px;
-  border: none;
-  background: #f05a7e;
-  color: white;
-  border-radius: 12px;
-  font-weight: bold;
-  cursor: pointer;
+.checkout-message.error {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+  border: 1px solid var(--danger-border);
 }
 
-.checkout-summary {
-  background: #fff;
-  padding: 24px;
-  border-radius: 18px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-  height: fit-content;
+.checkout-info-card ul {
+  padding-left: 18px;
+  color: #444;
+}
+
+.checkout-info-card li {
+  margin-bottom: 10px;
 }
 
 .highlight {
-  color: #f05a7e;
+  color: var(--luminous-green);
   font-weight: 700;
 }
 
-.note-box {
+.checkout-note {
   margin-top: 20px;
   padding: 14px;
-  background: #fff0f4;
+  background: var(--purple-soft);
+  border: 1px solid var(--purple-border);
   border-radius: 12px;
-  border: 1px solid #ffd6e1;
+  color: #555;
+}
+
+.checkout-links {
+  margin-top: 20px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.checkout-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
 }
 
 @media (max-width: 900px) {
   .checkout-layout {
     grid-template-columns: 1fr;
   }
+}
+.checkout-reassurance {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: var(--white);
+  padding: 14px 16px;
+  border-radius: 14px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-soft);
+  font-size: 14px;
+  font-weight: 600;
+  color: #444;
+}
 
-  .checkout-header {
-    flex-direction: column;
-    gap: 10px;
-  }
+.checkout-whatsapp {
+  margin-top: 14px;
 }
