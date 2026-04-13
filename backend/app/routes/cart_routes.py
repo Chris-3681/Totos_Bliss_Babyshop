@@ -8,11 +8,10 @@ from app.models.product import Product
 cart_bp = Blueprint("cart", __name__, url_prefix="/api/cart")
 
 
-# ADD TO CART
 @cart_bp.route("/add", methods=["POST"])
 @jwt_required()
 def add_to_cart():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
     data = request.get_json()
 
     product_id = data.get("product_id")
@@ -22,14 +21,9 @@ def add_to_cart():
         return jsonify({"error": "Product ID required"}), 400
 
     product = Product.query.get(product_id)
-
     if not product:
         return jsonify({"error": "Product not found"}), 404
 
-    if quantity > product.stock:
-        return jsonify({"error": "Not enough stock"}), 400
-
-    # get or create cart
     cart = Cart.query.filter_by(user_id=user_id).first()
 
     if not cart:
@@ -37,7 +31,6 @@ def add_to_cart():
         db.session.add(cart)
         db.session.commit()
 
-    # check if item already exists
     existing_item = CartItem.query.filter_by(
         cart_id=cart.id,
         product_id=product_id
@@ -59,50 +52,57 @@ def add_to_cart():
     return jsonify({"message": "Item added to cart"}), 201
 
 
-# GET CART
 @cart_bp.route("/", methods=["GET"])
 @jwt_required()
 def get_cart():
-    user_id = get_jwt_identity()
+    user_id = int(get_jwt_identity())
 
     cart = Cart.query.filter_by(user_id=user_id).first()
 
     if not cart:
         return jsonify({
             "items": [],
+            "subtotal": 0,
+            "vat": 0,
             "total": 0
-        })
+        }), 200
 
     items = CartItem.query.filter_by(cart_id=cart.id).all()
 
     cart_items = []
-    total = 0
+    subtotal = 0
 
     for item in items:
+        product = Product.query.get(item.product_id)
         item_total = item.quantity * item.price_at_time
-        total += item_total
+        subtotal += item_total
 
         cart_items.append({
             "product_id": item.product_id,
+            "name": product.name if product else "Product",
+            "image_url": product.image_url if product else "",
             "quantity": item.quantity,
             "price": item.price_at_time,
             "subtotal": item_total
         })
 
+    vat = subtotal * 0.16
+    total = subtotal + vat
+
     return jsonify({
         "items": cart_items,
+        "subtotal": subtotal,
+        "vat": vat,
         "total": total
-    })
+    }), 200
 
 
-# REMOVE ITEM
 @cart_bp.route("/remove/<int:product_id>", methods=["DELETE"])
 @jwt_required()
-def remove_item(product_id):
-    user_id = get_jwt_identity()
+def remove_from_cart(product_id):
+    user_id = int(get_jwt_identity())
 
     cart = Cart.query.filter_by(user_id=user_id).first()
-
     if not cart:
         return jsonify({"error": "Cart not found"}), 404
 
@@ -112,46 +112,9 @@ def remove_item(product_id):
     ).first()
 
     if not item:
-        return jsonify({"error": "Item not in cart"}), 404
+        return jsonify({"error": "Item not found in cart"}), 404
 
     db.session.delete(item)
     db.session.commit()
 
-    return jsonify({"message": "Item removed"})
-
-
-# UPDATE QUANTITY (important, don't skip this)
-@cart_bp.route("/update", methods=["PUT"])
-@jwt_required()
-def update_quantity():
-    user_id = get_jwt_identity()
-    data = request.get_json()
-
-    product_id = data.get("product_id")
-    quantity = data.get("quantity")
-
-    if quantity is None or quantity < 1:
-        return jsonify({"error": "Invalid quantity"}), 400
-
-    cart = Cart.query.filter_by(user_id=user_id).first()
-
-    if not cart:
-        return jsonify({"error": "Cart not found"}), 404
-
-    item = CartItem.query.filter_by(
-        cart_id=cart.id,
-        product_id=product_id
-    ).first()
-
-    if not item:
-        return jsonify({"error": "Item not in cart"}), 404
-
-    product = Product.query.get(product_id)
-
-    if quantity > product.stock:
-        return jsonify({"error": "Not enough stock"}), 400
-
-    item.quantity = quantity
-    db.session.commit()
-
-    return jsonify({"message": "Quantity updated"})
+    return jsonify({"message": "Item removed from cart"}), 200
