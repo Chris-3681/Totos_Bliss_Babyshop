@@ -1,6 +1,6 @@
 .home-page {
   min-height: 100vh;
-  background: linear-gradient(180deg, #fff7fa 0%, #f7f8fc 100%);
+  background: linear-gradient(180deg, var(--white) 0%, var(--soft-bg) 100%);
   padding: 32px;
   font-family: Arial, sans-serif;
 }
@@ -8,17 +8,17 @@
 .hero-card {
   max-width: 1200px;
   margin: 0 auto;
-  background: #fff;
+  background: var(--white);
   border-radius: 24px;
   padding: 36px;
   display: grid;
   grid-template-columns: 1.3fr 0.7fr;
   gap: 24px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.07);
+  box-shadow: var(--shadow-medium);
 }
 
 .hero-kicker {
-  color: #f05a7e;
+  color: var(--primary-purple);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -28,6 +28,7 @@
   font-size: 44px;
   line-height: 1.1;
   margin: 10px 0 16px;
+  color: var(--text-dark);
 }
 
 .hero-left p {
@@ -51,18 +52,18 @@
 }
 
 .hero-primary {
-  background: #f05a7e;
-  color: #fff;
+  background: var(--primary-purple);
+  color: var(--white);
 }
 
 .hero-secondary {
-  background: #f3f4f6;
-  color: #222;
+  background: var(--luminous-green);
+  color: var(--purple-dark);
 }
 
 .hero-panel {
-  background: #fff7fa;
-  border: 1px solid #ffd7e2;
+  background: var(--purple-soft);
+  border: 1px solid var(--purple-border);
   padding: 20px;
   border-radius: 18px;
   display: flex;
@@ -72,15 +73,15 @@
 
 .hero-panel a {
   text-decoration: none;
-  color: #333;
+  color: var(--text-dark);
   font-weight: 600;
 }
 
 .hero-panel button {
   margin-top: 10px;
   border: none;
-  background: #222;
-  color: #fff;
+  background: var(--primary-purple);
+  color: var(--white);
   padding: 12px 14px;
   border-radius: 12px;
   cursor: pointer;

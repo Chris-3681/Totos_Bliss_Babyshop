@@ -1,0 +1,60 @@
+.admin-orders-page {
+  min-height: 100vh;
+  background: var(--soft-bg);
+  padding: 24px;
+  font-family: Arial, sans-serif;
+}
+
+.admin-page-header {
+  background: linear-gradient(135deg, var(--white), var(--purple-soft));
+  padding: 28px;
+  border-radius: 18px;
+  margin-bottom: 22px;
+}
+
+.admin-page-header h1 {
+  margin: 0 0 8px;
+  color: var(--primary-purple);
+}
+
+.admin-list-card {
+  background: var(--white);
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: var(--shadow-soft);
+}
+
+.admin-item-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 16px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.admin-item-card select {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-light);
+}
+
+.admin-message {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.admin-message.error {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+  border: 1px solid var(--danger-border);
+}
+
+.admin-message.success {
+  background: var(--success-bg);
+  color: var(--success-text);
+  border: 1px solid var(--success-border);
+}

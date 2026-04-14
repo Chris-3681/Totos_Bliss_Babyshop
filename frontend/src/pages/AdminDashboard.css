@@ -1,0 +1,53 @@
+.admin-dashboard-page {
+  min-height: 100vh;
+  background: var(--soft-bg);
+  padding: 24px;
+  font-family: Arial, sans-serif;
+}
+
+.admin-hero {
+  background: linear-gradient(135deg, var(--white), var(--purple-soft));
+  padding: 28px;
+  border-radius: 18px;
+  margin-bottom: 22px;
+}
+
+.admin-hero h1 {
+  margin: 0 0 8px;
+  color: var(--primary-purple);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.stat-card {
+  background: var(--white);
+  padding: 22px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+}
+
+.stat-card h3 {
+  margin: 0;
+  font-size: 28px;
+  color: var(--primary-purple);
+}
+
+.admin-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.admin-btn {
+  text-decoration: none;
+  background: var(--primary-purple);
+  color: var(--white);
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+}

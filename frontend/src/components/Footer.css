@@ -1,0 +1,47 @@
+.footer {
+  margin-top: 28px;
+  background: var(--white);
+  border-radius: 18px;
+  padding: 28px 24px 18px;
+  box-shadow: var(--shadow-soft);
+  font-family: Arial, sans-serif;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 20px;
+}
+
+.footer h3,
+.footer h4 {
+  margin-top: 0;
+  color: var(--primary-purple);
+}
+
+.footer p {
+  margin: 8px 0;
+  color: var(--text-muted);
+}
+
+.footer-bottom {
+  border-top: 1px solid #eee;
+  margin-top: 20px;
+  padding-top: 14px;
+  text-align: center;
+  color: #777;
+  font-size: 14px;
+}
+
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.footer-whatsapp {
+  display: inline-block;
+  margin-top: 4px;
+  color: var(--primary-purple);
+  font-weight: 700;
+}

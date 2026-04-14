@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import API from "../services/api";
 import Navbar from "../components/Navbar";
 import "./Cart.css";
+import Footer from "../components/Footer";
 
 function Cart() {
   const [cartData, setCartData] = useState({
@@ -11,6 +12,8 @@ function Cart() {
     vat: 0,
     total: 0,
   });
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -25,14 +28,57 @@ function Cart() {
         };
 
         setCartData(safeData);
+        setErrorMessage("");
       } catch (err) {
         console.error("CART FETCH ERROR:", err);
         setCartData({ items: [], subtotal: 0, vat: 0, total: 0 });
+        setErrorMessage("Unable to load your cart right now.");
       }
     };
 
     fetchCart();
   }, []);
+
+  const removeItem = async (productId) => {
+    try {
+      await API.delete(`/cart/remove/${productId}`);
+
+      setCartData((prev) => {
+        const updatedItems = prev.items.filter(
+          (item) => item.product_id !== productId
+        );
+
+        const subtotal = updatedItems.reduce(
+          (sum, item) => sum + Number(item.subtotal),
+          0
+        );
+        const vat = subtotal * 0.16;
+        const total = subtotal + vat;
+
+        return {
+          items: updatedItems,
+          subtotal,
+          vat,
+          total,
+        };
+      });
+
+      setSuccessMessage("Item removed from cart.");
+      setErrorMessage("");
+
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 2000);
+    } catch (err) {
+      console.error("REMOVE ITEM ERROR:", err);
+      setErrorMessage("Failed to remove item from cart.");
+      setSuccessMessage("");
+
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 2000);
+    }
+  };
 
   return (
     <div className="cart-page">
@@ -42,6 +88,9 @@ function Cart() {
         <h1>Your Shopping Cart</h1>
         <p>Review your selected baby products before placing your order.</p>
       </div>
+
+      {errorMessage && <div className="cart-message error">{errorMessage}</div>}
+      {successMessage && <div className="cart-message success">{successMessage}</div>}
 
       {cartData.items.length === 0 ? (
         <div className="cart-empty">
@@ -56,16 +105,31 @@ function Cart() {
           <div className="cart-items">
             {cartData.items.map((item, index) => (
               <div className="cart-card" key={index}>
-                <div className="cart-image-placeholder">Baby Item</div>
+                <div className="cart-image-wrap">
+                  <img
+                    src={
+                      item.image_url ||
+                      "https://via.placeholder.com/220x220?text=Totos+Bliss"
+                    }
+                    alt={item.name}
+                    className="cart-product-image"
+                  />
+                </div>
 
                 <div className="cart-card-content">
-                  <h3>Selected Product</h3>
-                  <p>Product ID: {item.product_id}</p>
+                  <h3>{item.name}</h3>
                   <p>Quantity: {item.quantity}</p>
-                  <p>Unit Price: KSh {Number(item.price).toLocaleString()}</p>
+                  <p>Price: KSh {Number(item.price).toLocaleString()}</p>
                   <p className="cart-subtotal">
                     Item Total: KSh {Number(item.subtotal).toLocaleString()}
                   </p>
+
+                  <button
+                    className="remove-btn"
+                    onClick={() => removeItem(item.product_id)}
+                  >
+                    Remove
+                  </button>
                 </div>
               </div>
             ))}
@@ -99,6 +163,8 @@ function Cart() {
           </div>
         </div>
       )}
+
+      <Footer />
     </div>
   );
 }

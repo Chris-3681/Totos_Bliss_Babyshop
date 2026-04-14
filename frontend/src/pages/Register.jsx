@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import API from "../services/api";
+import "./Auth.css";
 
 function Register() {
   const [form, setForm] = useState({
@@ -10,64 +11,96 @@ function Register() {
     password: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+
   const navigate = useNavigate();
 
   const handleRegister = async () => {
-    if (!form.name || !form.email || !form.phone || !form.password) {
-      alert("All fields are required");
+    const { name, email, phone, password } = form;
+
+    if (!name || !email || !phone || !password) {
+      setErrorMessage("Please fill in all fields.");
+      setSuccessMessage("");
       return;
     }
 
     try {
+      setLoading(true);
+      setErrorMessage("");
+      setSuccessMessage("");
+
       await API.post("/auth/register", form);
-      alert("Registered successfully");
-      navigate("/login");
+
+      setSuccessMessage("Account created successfully. Redirecting to login...");
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 900);
     } catch (err) {
       console.error("REGISTER ERROR:", err);
-      console.log("REGISTER DATA:", err.response?.data);
-      alert("Registration failed");
+
+      const backendMessage =
+        err.response?.data?.error ||
+        err.response?.data?.msg ||
+        "Registration failed. Please try again.";
+
+      setErrorMessage(backendMessage);
+      setSuccessMessage("");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div>
-      <h2>Register</h2>
+    <div className="auth-page">
+      <div className="auth-card">
+        <h1>Create Account</h1>
+        <p className="auth-subtitle">
+          Join Totos Bliss and start shopping for your baby.
+        </p>
 
-      <input
-        placeholder="Name"
-        value={form.name}
-        onChange={(e) => setForm({ ...form, name: e.target.value })}
-      />
-      <br />
+        {errorMessage && (
+          <div className="form-message error">{errorMessage}</div>
+        )}
+        {successMessage && (
+          <div className="form-message success">{successMessage}</div>
+        )}
 
-      <input
-        placeholder="Email"
-        value={form.email}
-        onChange={(e) => setForm({ ...form, email: e.target.value })}
-      />
-      <br />
+        <input
+          placeholder="Full name"
+          value={form.name}
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
+        />
 
-      <input
-        placeholder="Phone"
-        value={form.phone}
-        onChange={(e) => setForm({ ...form, phone: e.target.value })}
-      />
-      <br />
+        <input
+          placeholder="Email"
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+        />
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={form.password}
-        onChange={(e) => setForm({ ...form, password: e.target.value })}
-      />
-      <br />
+        <input
+          placeholder="Phone number"
+          value={form.phone}
+          onChange={(e) => setForm({ ...form, phone: e.target.value })}
+        />
 
-      <button onClick={handleRegister}>Register</button>
-      <br /><br />
+        <input
+          type="password"
+          placeholder="Password"
+          value={form.password}
+          onChange={(e) => setForm({ ...form, password: e.target.value })}
+        />
 
-      <Link to="/login">Go to Login</Link>
-      <br />
-      <Link to="/">Back Home</Link>
+        <button onClick={handleRegister} disabled={loading}>
+          {loading ? "Creating..." : "Create Account"}
+        </button>
+
+        <p className="auth-footer">
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
+      </div>
     </div>
   );
 }
