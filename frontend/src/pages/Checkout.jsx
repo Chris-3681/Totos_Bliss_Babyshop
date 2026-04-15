@@ -89,7 +89,7 @@ function Checkout() {
           </button>
 
           <a
-            href="https://wa.me/254715197697?text=Hi%20I%20need%20help%20with%20checkout"
+            href="https://wa.me/254793838957?text=Hi%20I%20need%20help%20with%20checkout"
             target="_blank"
             rel="noreferrer"
             className="whatsapp-inline checkout-whatsapp"

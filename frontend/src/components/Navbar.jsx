@@ -1,8 +1,8 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { FaShoppingCart } from "react-icons/fa";
 import API from "../services/api";
 import "./Navbar.css";
-import { FaShoppingCart } from "react-icons/fa";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -55,8 +55,13 @@ function Navbar() {
   return (
     <header className="navbar">
       <div className="navbar-brand">
-        <Link to="/">Totos Bliss</Link>
-        <span className="brand-tag">Baby Shop</span>
+        <Link to="/" className="brand-link">
+          <img src="/logo.PNG" alt="Totos Bliss logo" className="brand-logo" />
+          <div className="brand-text">
+            <span className="brand-name">Totos Bliss</span>
+            <span className="brand-tag">Baby Shop</span>
+          </div>
+        </Link>
       </div>
 
       <nav className="navbar-links">
@@ -66,10 +71,10 @@ function Navbar() {
 
         {token && (
           <>
-           <Link className={`cart-link ${isActive("/cart")}`} to="/cart">
-             <FaShoppingCart className="cart-icon" />
-             <span className="cart-count">{cartCount}</span>
-           </Link>
+            <Link className={`cart-link ${isActive("/cart")}`} to="/cart">
+              <FaShoppingCart className="cart-icon" />
+              <span className="cart-count">{cartCount}</span>
+            </Link>
 
             <Link className={isActive("/checkout")} to="/checkout">
               Checkout

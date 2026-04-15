@@ -241,7 +241,7 @@ function ProductPage() {
   </button>
 
   <a
-    href="https://wa.me/254715197697?text=Hi%20I%20am%20interested%20in%20this%20product"
+    href="https://wa.me/254793838957?text=Hi%20I%20am%20interested%20in%20this%20product"
     target="_blank"
     rel="noreferrer"
     className="whatsapp-inline"
