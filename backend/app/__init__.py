@@ -1,44 +1,43 @@
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
-import os
 
 db = SQLAlchemy()
 jwt = JWTManager()
 
+
 def create_app():
     app = Flask(__name__)
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:12345678@localhost:5432/totosbliss"
+    # =========================
+    # DATABASE CONFIG (FIXED)
+    # =========================
+    db_url = os.environ.get("DATABASE_URL")
+
+    if db_url and db_url.startswith("postgres://"):
+        db_url = db_url.replace("postgres://", "postgresql://", 1)
+
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_url or "sqlite:///app.db"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["JWT_SECRET_KEY"] = "this-is-a-very-long-random-secret-key-123456"
-    app.config["SECRET_KEY"] = "super-secret-reset-key-123456"
-    app.config["RESET_TOKEN_EXPIRES"] = 1800
-    app.config["MAIL_SERVER"] = "smtp.gmail.com"
-    app.config["MAIL_PORT"] = 587
-    app.config["MAIL_USE_TLS"] = True
-    app.config["MAIL_USERNAME"] = "your-email@example.com"
-    app.config["MAIL_PASSWORD"] = "your-email-password"
-    app.config["MAIL_DEFAULT_SENDER"] = "your-email@example.com"
 
-    # image upload config
-    app.config["UPLOAD_FOLDER"] = os.path.join(app.root_path, "static", "uploads")
-    app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024  # 5MB max
+    # =========================
+    # SECURITY CONFIG
+    # =========================
+    app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY", "dev-jwt-secret")
+    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret")
 
-    os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
-
+    # =========================
+    # INIT EXTENSIONS
+    # =========================
     db.init_app(app)
     jwt.init_app(app)
     CORS(app)
 
-    from app.models.user import User
-    from app.models.product import Product
-    from app.models.cart import Cart, CartItem
-    from app.models.order import Order, OrderItem
-    from app.models.delivery import Delivery
-    from app.models.payment import Payment
-
+    # =========================
+    # REGISTER BLUEPRINTS
+    # =========================
     from app.routes.auth_routes import auth_bp
     from app.routes.product_routes import product_bp
     from app.routes.cart_routes import cart_bp
@@ -53,7 +52,13 @@ def create_app():
     app.register_blueprint(delivery_bp)
     app.register_blueprint(payment_bp)
 
+    # =========================
+    # CREATE TABLES (SAFE)
+    # =========================
     with app.app_context():
-        db.create_all()
+        try:
+            db.create_all()
+        except Exception as e:
+            print("DB INIT ERROR:", e)
 
     return app
