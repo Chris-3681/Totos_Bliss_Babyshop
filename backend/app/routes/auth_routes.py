@@ -82,37 +82,6 @@ def login():
 # =========================
 # DEBUG: CREATE / RESET ADMIN
 # =========================
-@auth_bp.route("/debug/create-admin", methods=["GET"])
-def create_admin_debug():
-    admin_email = "admin@totos.com"
-    admin_password = "admin123"
-
-    admin = User.query.filter_by(email=admin_email).first()
-
-    hashed_password = bcrypt.hashpw(
-        admin_password.encode("utf-8"), bcrypt.gensalt()
-    ).decode("utf-8")
-
-    if admin:
-        admin.name = "Admin"
-        admin.phone = "0700000000"
-        admin.password_hash = hashed_password
-        admin.is_admin = True
-        db.session.commit()
-        return jsonify({"message": "Admin updated successfully"}), 200
-
-    new_admin = User(
-        name="Admin",
-        email=admin_email,
-        phone="0700000000",
-        password_hash=hashed_password,
-        is_admin=True
-    )
-
-    db.session.add(new_admin)
-    db.session.commit()
-
-    return jsonify({"message": "Admin created successfully"}), 201
 
 
 # =========================
