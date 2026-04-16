@@ -11,6 +11,8 @@ jwt = JWTManager()
 def create_app():
     app = Flask(__name__)
 
+    app.config["DEBUG"] = False
+
     # =========================
     # DATABASE CONFIG (FIXED)
     # =========================
