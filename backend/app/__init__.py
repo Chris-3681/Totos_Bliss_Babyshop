@@ -11,10 +11,8 @@ jwt = JWTManager()
 def create_app():
     app = Flask(__name__)
 
-    app.config["DEBUG"] = False
-
     # =========================
-    # DATABASE CONFIG (FIXED)
+    # DATABASE CONFIG
     # =========================
     db_url = os.environ.get("DATABASE_URL")
 
@@ -27,8 +25,14 @@ def create_app():
     # =========================
     # SECURITY CONFIG
     # =========================
-    app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY", "dev-jwt-secret")
-    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret")
+    app.config["JWT_SECRET_KEY"] = os.environ.get(
+        "JWT_SECRET_KEY", "totos_bliss_jwt_secret_2026"
+    )
+    app.config["SECRET_KEY"] = os.environ.get(
+        "SECRET_KEY", "totos_bliss_secret_2026"
+    )
+
+    app.config["DEBUG"] = False
 
     # =========================
     # INIT EXTENSIONS
@@ -55,12 +59,42 @@ def create_app():
     app.register_blueprint(payment_bp)
 
     # =========================
-    # CREATE TABLES (SAFE)
+    # CREATE TABLES + SEED ADMIN
     # =========================
+    from app.models.user import User
+    import bcrypt
+
     with app.app_context():
         try:
             db.create_all()
+
+            # Seed admin user if not exists
+            if not User.query.filter_by(email="admin@totos.com").first():
+                hashed_password = bcrypt.hashpw(
+                    "admin123".encode("utf-8"), bcrypt.gensalt()
+                ).decode("utf-8")
+
+                admin = User(
+                    name="Admin",
+                    email="admin@totos.com",
+                    phone="0700000000",
+                    password_hash=hashed_password,
+                    is_admin=True,
+                )
+
+                db.session.add(admin)
+                db.session.commit()
+
+                print("Admin user created successfully")
+
         except Exception as e:
             print("DB INIT ERROR:", e)
+
+    # =========================
+    # ROOT ROUTE (OPTIONAL)
+    # =========================
+    @app.route("/")
+    def home():
+        return {"message": "Totos Bliss API is live"}, 200
 
     return app
