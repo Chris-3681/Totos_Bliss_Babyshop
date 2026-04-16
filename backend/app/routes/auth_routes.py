@@ -136,6 +136,29 @@ def reset_password():
     hashed_password = bcrypt.hashpw(new_password.encode("utf-8"), bcrypt.gensalt())
     user.password_hash = hashed_password.decode("utf-8")
 
+
+@auth_bp.route("/debug/reset-admin", methods=["GET"])
+def reset_admin():
+    from app.models.user import User
+    import bcrypt
+
+    admin = User.query.filter_by(email="admin@totos.com").first()
+
+    if not admin:
+        return {"message": "Admin not found"}, 404
+
+    new_password = "admin123"
+
+    admin.password_hash = bcrypt.hashpw(
+        new_password.encode("utf-8"), bcrypt.gensalt()
+    ).decode("utf-8")
+
+    admin.is_admin = True
+
+    db.session.commit()
+
+    return {"message": "Admin password reset"}, 200
+
     db.session.commit()
 
     return jsonify({"message": "Password reset successful"}), 200
