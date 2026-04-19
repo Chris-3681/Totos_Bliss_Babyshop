@@ -55,36 +55,46 @@ def get_products():
 @product_bp.route("/", methods=["POST"])
 @jwt_required()
 def create_product():
-    user_id = int(get_jwt_identity())
-    user = User.query.get(user_id)
+    try:
+        user_id = int(get_jwt_identity())
+        user = User.query.get(user_id)
 
-    if not user or not user.is_admin:
-        return jsonify({"error": "Unauthorized"}), 403
+        if not user or not user.is_admin:
+            return jsonify({"error": "Unauthorized"}), 403
 
-    name = request.form.get("name")
-    description = request.form.get("description")
-    price = request.form.get("price")
-    stock = request.form.get("stock", 0)
-    image = request.files.get("image")
+        name = request.form.get("name")
+        description = request.form.get("description")
+        price = request.form.get("price")
+        stock = request.form.get("stock", 0)
+        image = request.files.get("image")
 
-    if not name or not price:
-        return jsonify({"error": "Name and price are required"}), 400
+        print("NAME:", name)
+        print("DESCRIPTION:", description)
+        print("PRICE:", price)
+        print("STOCK:", stock)
+        print("IMAGE:", image)
 
-    image_url = save_image(image)
+        if not name or not price:
+            return jsonify({"error": "Name and price are required"}), 400
 
-    product = Product(
-        name=name,
-        description=description,
-        price=float(price),
-        stock=int(stock),
-        image_url=image_url
-    )
+        image_url = save_image(image)
 
-    db.session.add(product)
-    db.session.commit()
+        product = Product(
+            name=name,
+            description=description,
+            price=float(price),
+            stock=int(stock),
+            image_url=image_url
+        )
 
-    return jsonify({"message": "Product created"}), 201
+        db.session.add(product)
+        db.session.commit()
 
+        return jsonify({"message": "Product created"}), 201
+
+    except Exception as e:
+        print("CREATE PRODUCT ERROR:", str(e))
+        return jsonify({"error": str(e)}), 500
 
 @product_bp.route("/<int:product_id>", methods=["PUT"])
 @jwt_required()
