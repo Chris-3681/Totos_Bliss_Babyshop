@@ -22,6 +22,11 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url or "sqlite:///app.db"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+    app.config["UPLOAD_FOLDER"] = os.path.join(app.root_path, "static", "uploads")
+    app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
+
+    os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+
     # =========================
     # SECURITY CONFIG
     # =========================
