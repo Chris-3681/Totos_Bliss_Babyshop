@@ -163,3 +163,32 @@
 .checkout-whatsapp {
   margin-top: 14px;
 }
+
+@media (max-width: 640px) {
+  .checkout-page {
+    padding: 12px;
+  }
+
+  .checkout-hero {
+    padding: 22px 16px;
+  }
+
+  .checkout-hero h1 {
+    font-size: 26px;
+  }
+
+  .checkout-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .checkout-form-card,
+  .checkout-info-card {
+    padding: 18px;
+  }
+
+  .checkout-reassurance {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

@@ -18,6 +18,8 @@ function ProductPage() {
     text: "",
   });
 
+  const whatsappNumber = "254715197697";
+
   useEffect(() => {
     API.get("/products/")
       .then((res) => {
@@ -68,6 +70,17 @@ function ProductPage() {
         setToast({ show: false, type: "", text: "" });
       }, 2500);
     }
+  };
+
+  const buildWhatsAppLink = (product) => {
+    const message = `Hi, I am interested in this product:
+
+${product.name}
+Price: KSh ${Number(product.price).toLocaleString()}
+
+Link: ${window.location.origin}/products`;
+
+    return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
   };
 
   const filteredProducts = useMemo(() => {
@@ -197,7 +210,7 @@ function ProductPage() {
                   <img
                     src={
                       p.image_url ||
-                      "https://via.placeholder.com/320x220?text=Totos+Bliss"
+                      "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=800&auto=format&fit=crop&q=80"
                     }
                     alt={p.name}
                     className="product-image"
@@ -211,44 +224,40 @@ function ProductPage() {
                     {p.description || "Comfortable, high-quality baby product"}
                   </p>
 
-                <div className="product-trust">
-                 <span>✔ Quality checked</span>
-                 <span>✔ Fast delivery available</span>
-                </div>
+                  <div className="product-trust">
+                    <span>✔ Quality checked</span>
+                    <span>✔ Fast delivery available</span>
+                  </div>
 
                   <p className="product-price">
                     KSh {Number(p.price).toLocaleString()}
                   </p>
 
-                <div className="product-meta">
-                  {Number(p.stock) > 0 ? (
-                  Number(p.stock) <= 5 ? (
-                 <span className="low-stock">Fast moving item</span>
-                   ) : (
-                 <span className="in-stock">Ready for delivery</span>
-                   )
-                 ) : (
-                <span className="out-stock">Out of stock</span>
-                 )}
+                  <div className="product-meta">
+                    {Number(p.stock) > 0 ? (
+                      <span className="in-stock">Available</span>
+                    ) : (
+                      <span className="out-stock">Out of stock</span>
+                    )}
+                  </div>
+
+                  <button
+                    className="primary-btn"
+                    onClick={() => addToCart(p.id)}
+                    disabled={Number(p.stock) <= 0}
+                  >
+                    {Number(p.stock) > 0 ? "Add to Cart" : "Unavailable"}
+                  </button>
+
+                  <a
+                    href={buildWhatsAppLink(p)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="whatsapp-inline"
+                  >
+                    Ask on WhatsApp
+                  </a>
                 </div>
-
-  <button
-    className="primary-btn"
-    onClick={() => addToCart(p.id)}
-    disabled={Number(p.stock) <= 0}
-  >
-    {Number(p.stock) > 0 ? "Add to Cart" : "Unavailable"}
-  </button>
-
-  <a
-    href="https://wa.me/254793838957?text=Hi%20I%20am%20interested%20in%20this%20product"
-    target="_blank"
-    rel="noreferrer"
-    className="whatsapp-inline"
-  >
-     WhatsApp
-  </a>
-</div>
               </div>
             ))}
           </div>

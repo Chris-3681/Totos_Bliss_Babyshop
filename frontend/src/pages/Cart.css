@@ -183,3 +183,30 @@
     height: 220px;
   }
 }
+@media (max-width: 640px) {
+  .cart-page {
+    padding: 12px;
+  }
+
+  .cart-hero {
+    padding: 22px 16px;
+  }
+
+  .cart-hero h1 {
+    font-size: 26px;
+  }
+
+  .cart-card {
+    grid-template-columns: 1fr;
+    padding: 14px;
+  }
+
+  .cart-image-wrap {
+    width: 100%;
+    height: 220px;
+  }
+
+  .cart-summary {
+    padding: 18px;
+  }
+}
