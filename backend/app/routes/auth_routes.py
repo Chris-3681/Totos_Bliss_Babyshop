@@ -1,8 +1,10 @@
-from flask import Blueprint, request, jsonify
-from app import db
+from flask import Blueprint, request, jsonify, current_app
+from app import db, mail
 from app.models.user import User
 import bcrypt
 from flask_jwt_extended import create_access_token
+from flask_mail import Message
+from datetime import timedelta
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 
@@ -74,28 +76,59 @@ def login():
             "id": user.id,
             "name": user.name,
             "email": user.email,
-            "is_admin": user.is_admin   # 🔥 CRITICAL
+            "is_admin": user.is_admin
         }
     }), 200
 
 
 # =========================
-# DEBUG: CREATE / RESET ADMIN
-# =========================
-
-
-# =========================
-# FORGOT PASSWORD (basic)
+# FORGOT PASSWORD
 # =========================
 @auth_bp.route("/forgot-password", methods=["POST"])
 def forgot_password():
-    data = request.get_json()
-    email = data.get("email")
+    try:
+        data = request.get_json()
+        email = data.get("email")
 
-    user = User.query.filter_by(email=email).first()
+        if not email:
+            return jsonify({"error": "Email is required"}), 400
 
-    if not user:
-        return jsonify({"message": "If account exists, reset instructions sent"}), 200
+        user = User.query.filter_by(email=email).first()
 
-    # Placeholder (you already wired email logic separately)
-    return jsonify({"message": "Reset instructions sent"}), 200
+        if not user:
+            return jsonify({"message": "If account exists, reset link sent"}), 200
+
+        reset_token = create_access_token(
+            identity=str(user.id),
+            expires_delta=timedelta(hours=1)
+        )
+
+        reset_link = f"https://totos-bliss-babyshop.vercel.app//reset-password/{reset_token}"
+
+        msg = Message(
+            subject="Password Reset - Totos Bliss",
+            sender=current_app.config["MAIL_USERNAME"],
+            recipients=[email],
+            body=f"""
+Hi {user.name},
+
+Click the link below to reset your password:
+
+{reset_link}
+
+This link will expire in 1 hour.
+
+If you did not request this, ignore this email.
+"""
+        )
+
+        mail.send(msg)
+
+        return jsonify({
+          "message": "Reset link sent",
+          "reset_link": reset_link   # 👈 ADD THIS
+    }), 200
+
+    except Exception as e:
+        print("FORGOT PASSWORD ERROR:", str(e))
+        return jsonify({"error": "Failed to send reset email"}), 500

@@ -1,11 +1,14 @@
 import os
+from datetime import timedelta
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
+from flask_mail import Mail
 
 db = SQLAlchemy()
 jwt = JWTManager()
+mail = Mail()
 
 
 def create_app():
@@ -22,28 +25,43 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = db_url or "sqlite:///app.db"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    app.config["UPLOAD_FOLDER"] = os.path.join(app.root_path, "static", "uploads")
-    app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
-
-    os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
-
     # =========================
     # SECURITY CONFIG
     # =========================
     app.config["JWT_SECRET_KEY"] = os.environ.get(
         "JWT_SECRET_KEY", "totos_bliss_jwt_secret_2026"
     )
+
     app.config["SECRET_KEY"] = os.environ.get(
         "SECRET_KEY", "totos_bliss_secret_2026"
     )
 
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=7)
     app.config["DEBUG"] = False
+
+    # =========================
+    # MAIL CONFIG
+    # =========================
+    app.config["MAIL_SERVER"] = "smtp.gmail.com"
+    app.config["MAIL_PORT"] = 587
+    app.config["MAIL_USE_TLS"] = True
+    app.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
+    app.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
+
+    # =========================
+    # IMAGE UPLOAD CONFIG
+    # =========================
+    app.config["UPLOAD_FOLDER"] = os.path.join(app.root_path, "static", "uploads")
+    app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
+
+    os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 
     # =========================
     # INIT EXTENSIONS
     # =========================
     db.init_app(app)
     jwt.init_app(app)
+    mail.init_app(app)
     CORS(app)
 
     # =========================
@@ -64,39 +82,16 @@ def create_app():
     app.register_blueprint(payment_bp)
 
     # =========================
-    # CREATE TABLES + SEED ADMIN
+    # INIT DB
     # =========================
-    from app.models.user import User
-    import bcrypt
-
     with app.app_context():
         try:
             db.create_all()
-
-            # Seed admin user if not exists
-            if not User.query.filter_by(email="admin@totos.com").first():
-                hashed_password = bcrypt.hashpw(
-                    "admin123".encode("utf-8"), bcrypt.gensalt()
-                ).decode("utf-8")
-
-                admin = User(
-                    name="Admin",
-                    email="admin@totos.com",
-                    phone="0700000000",
-                    password_hash=hashed_password,
-                    is_admin=True,
-                )
-
-                db.session.add(admin)
-                db.session.commit()
-
-                print("Admin user created successfully")
-
         except Exception as e:
             print("DB INIT ERROR:", e)
 
     # =========================
-    # ROOT ROUTE (OPTIONAL)
+    # ROOT ROUTE
     # =========================
     @app.route("/")
     def home():
