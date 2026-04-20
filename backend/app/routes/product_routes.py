@@ -1,6 +1,6 @@
 import os
 import uuid
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify, current_app, url_for
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from werkzeug.utils import secure_filename
 
@@ -37,7 +37,7 @@ def save_image(file):
     file_path = os.path.join(upload_folder, filename)
     file.save(file_path)
 
-    return f"{request.host_url.rstrip('/')}/static/uploads/{filename}"
+    return url_for("static", filename=f"uploads/{filename}", _external=True)
 
 
 @product_bp.route("/", methods=["GET"])
