@@ -1,8 +1,7 @@
-import os
 import uuid
-from flask import Blueprint, request, jsonify, current_app, url_for
+from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from werkzeug.utils import secure_filename
+import cloudinary.uploader
 
 from app import db
 from app.models.product import Product
@@ -24,20 +23,14 @@ def save_image(file):
     if not allowed_file(file.filename):
         raise ValueError("Invalid image format. Use png, jpg, jpeg, or webp.")
 
-    ext = file.filename.rsplit(".", 1)[1].lower()
-    unique_name = f"{uuid.uuid4().hex}.{ext}"
-    filename = secure_filename(unique_name)
+    upload_result = cloudinary.uploader.upload(
+        file,
+        folder="totos_bliss_products",
+        public_id=f"{uuid.uuid4().hex}",
+        resource_type="image"
+    )
 
-    upload_folder = current_app.config.get("UPLOAD_FOLDER")
-    if not upload_folder:
-        raise ValueError("UPLOAD_FOLDER is not configured.")
-
-    os.makedirs(upload_folder, exist_ok=True)
-
-    file_path = os.path.join(upload_folder, filename)
-    file.save(file_path)
-
-    return url_for("static", filename=f"uploads/{filename}", _external=True)
+    return upload_result.get("secure_url")
 
 
 @product_bp.route("/", methods=["GET"])

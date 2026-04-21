@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from flask_mail import Mail
+import cloudinary
 
 db = SQLAlchemy()
 jwt = JWTManager()
@@ -47,14 +48,17 @@ def create_app():
     app.config["MAIL_USE_TLS"] = True
     app.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
     app.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
+    app.config["FRONTEND_URL"] = os.environ.get("FRONTEND_URL")
 
     # =========================
-    # IMAGE UPLOAD CONFIG
+    # CLOUDINARY CONFIG
     # =========================
-    app.config["UPLOAD_FOLDER"] = os.path.join(app.root_path, "static", "uploads")
-    app.config["MAX_CONTENT_LENGTH"] = 5 * 1024 * 1024
-
-    os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+    cloudinary.config(
+        cloud_name=os.environ.get("CLOUDINARY_CLOUD_NAME"),
+        api_key=os.environ.get("CLOUDINARY_API_KEY"),
+        api_secret=os.environ.get("CLOUDINARY_API_SECRET"),
+        secure=True
+    )
 
     # =========================
     # INIT EXTENSIONS
@@ -81,18 +85,12 @@ def create_app():
     app.register_blueprint(delivery_bp)
     app.register_blueprint(payment_bp)
 
-    # =========================
-    # INIT DB
-    # =========================
     with app.app_context():
         try:
             db.create_all()
         except Exception as e:
             print("DB INIT ERROR:", e)
 
-    # =========================
-    # ROOT ROUTE
-    # =========================
     @app.route("/")
     def home():
         return {"message": "Totos Bliss API is live"}, 200
