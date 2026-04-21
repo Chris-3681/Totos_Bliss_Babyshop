@@ -1,6 +1,6 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaBars, FaTimes } from "react-icons/fa";
 import API from "../services/api";
 import "./Navbar.css";
 
@@ -9,6 +9,7 @@ function Navbar() {
   const location = useLocation();
 
   const [cartCount, setCartCount] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const token = localStorage.getItem("token");
   const storedUser = localStorage.getItem("user");
@@ -25,12 +26,10 @@ function Navbar() {
       try {
         const res = await API.get("/cart/");
         const items = Array.isArray(res.data?.items) ? res.data.items : [];
-
         const totalItems = items.reduce(
           (sum, item) => sum + Number(item.quantity || 0),
           0
         );
-
         setCartCount(totalItems);
       } catch (err) {
         console.error("NAVBAR CART COUNT ERROR:", err);
@@ -41,10 +40,15 @@ function Navbar() {
     fetchCartCount();
   }, [token, location.pathname]);
 
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setCartCount(0);
+    setMenuOpen(false);
     navigate("/login");
   };
 
@@ -54,26 +58,44 @@ function Navbar() {
 
   return (
     <header className="navbar">
-      <div className="navbar-brand">
-        <Link to="/" className="brand-link">
-          <img src="/logo.PNG" alt="Totos Bliss logo" className="brand-logo" />
-          <div className="brand-text">
-            <span className="brand-name">Totos Bliss</span>
-            <span className="brand-tag">Baby Shop</span>
-          </div>
-        </Link>
+      <div className="navbar-top">
+        <div className="navbar-brand">
+          <Link to="/" className="brand-link">
+            <img src="/logo.png" alt="Totos Bliss logo" className="brand-logo" />
+            <div className="brand-text">
+              <span className="brand-name">Totos Bliss</span>
+              <span className="brand-tag">Baby Shop</span>
+            </div>
+          </Link>
+        </div>
+
+        <div className="navbar-mobile-actions">
+          {token && (
+            <Link className={`cart-link ${isActive("/cart")}`} to="/cart">
+              <FaShoppingCart className="cart-icon" />
+              <span className="cart-count">{cartCount}</span>
+            </Link>
+          )}
+
+          <button
+            className="menu-toggle"
+            onClick={() => setMenuOpen((prev) => !prev)}
+            aria-label="Toggle navigation menu"
+          >
+            {menuOpen ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
       </div>
 
-      <nav className="navbar-links">
+      <nav className={`navbar-links ${menuOpen ? "open" : ""}`}>
         <Link className={isActive("/products")} to="/products">
           Products
         </Link>
 
         {token && (
           <>
-            <Link className={`cart-link ${isActive("/cart")}`} to="/cart">
-              <FaShoppingCart className="cart-icon" />
-              <span className="cart-count">{cartCount}</span>
+            <Link className="desktop-cart-link" to="/cart">
+              Cart
             </Link>
 
             <Link className={isActive("/checkout")} to="/checkout">

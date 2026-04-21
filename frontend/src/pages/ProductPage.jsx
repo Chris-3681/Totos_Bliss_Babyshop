@@ -4,6 +4,7 @@ import "./Products.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import LoadingBlock from "../components/LoadingBlock";
+import { FaSlidersH } from "react-icons/fa";
 
 function ProductPage() {
   const [products, setProducts] = useState([]);
@@ -12,13 +13,14 @@ function ProductPage() {
   const [maxPrice, setMaxPrice] = useState("");
   const [inStockOnly, setInStockOnly] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [toast, setToast] = useState({
     show: false,
     type: "",
     text: "",
   });
 
-  const whatsappNumber = "254715197697";
+  const whatsappNumber = "254700000000";
 
   useEffect(() => {
     API.get("/products/")
@@ -123,9 +125,9 @@ Link: ${window.location.origin}/products`;
 
       <div className="store-hero">
         <div className="hero-content">
-          <h1>Everything Your Baby Needs, In One Place</h1>
+          <h1>Everything Your Baby Needs</h1>
           <p>
-            Quality baby clothing, essentials, and accessories curated for comfort,
+            Quality baby essentials, clothing, and accessories curated for comfort,
             safety, and style.
           </p>
         </div>
@@ -143,9 +145,17 @@ Link: ${window.location.origin}/products`;
           <h1>Totos Bliss</h1>
           <p className="muted">Baby essentials, clothing and accessories</p>
         </div>
+
+        <button
+          className="filter-toggle-btn"
+          onClick={() => setFiltersOpen((prev) => !prev)}
+        >
+          <FaSlidersH />
+          <span>Filter & Sort</span>
+        </button>
       </header>
 
-      <div className="products-top-filters">
+      <div className={`products-top-filters ${filtersOpen ? "open" : ""}`}>
         <label className="filter-block">
           <span>Search products</span>
           <input
